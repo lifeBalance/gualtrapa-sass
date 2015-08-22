@@ -142,8 +142,7 @@ gulp.task('compile-bootstrap', function() {
 
 // Compile theme.scss into bootstrap-theme.css (For illustrative purposes)
 gulp.task('compile-bootstrap-theme', function() {
-  return gulp.src("source/sass/bootstrap/theme.scss")
-    .pipe(plugins.rename('bootstrap-theme.scss'))
+  return gulp.src("source/sass/bootstrap-theme.scss")
     .pipe(plugins.sass())
     .pipe(gulp.dest("dist/css"));
 });
@@ -153,7 +152,7 @@ gulp.task('compile-bootstrap-theme', function() {
 ********************/
 
 // It generates 'main.min.css'
-gulp.task('minify-main-styles', ['compile-main-styles'], function() {
+gulp.task('minify-main-styles', ['sass'], function() {
   return gulp.src('dist/css/main.css')
     .pipe(plugins.rename('main.min.css'))
     .pipe(plugins.minifyCss({compatibility: 'ie8'}))
