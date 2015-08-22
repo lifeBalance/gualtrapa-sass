@@ -1,0 +1,24 @@
+{
+  "name": "gualtrapa-sass",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lifeBalance/gualtrapa-sass.git"
+  },
+  "author": "lifeBalance",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lifeBalance/gualtrapa-sass/issues"
+  },
+  "homepage": "https://github.com/lifeBalance/gualtrapa-sass#readme",
+  "devDependencies": {
+    "browser-sync": "^2.8.2",
+    "gulp": "^3.9.0",
+    "gulp-sass": "^2.0.4"
+  }
+}
