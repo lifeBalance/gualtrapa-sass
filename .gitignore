@@ -1,4 +1,5 @@
+node_modules/
 dist/css/**
 dist/js/**
-dist/*.html
-node_modules/
+*.html
+!source/templates/**/*.html
