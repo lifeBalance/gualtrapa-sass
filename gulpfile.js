@@ -30,19 +30,25 @@ gulp.task('serve', ['templates', 'sass', 'scripts'], function() {
 
   gulp.watch("source/sass/main.scss", ['sass']);
   gulp.watch("source/js/*.js", ['scripts']);
-  gulp.watch("source/templates/*.html", ['templates']);
+  gulp.watch(["source/templates/**/*.nunjucks"], ['templates']);
 });
 
 /*******************
 *     Nunjucks     *
 ********************/
+function nunjucksError(error){
+  plugins.notify.onError({  title: "Nunjucks Error", 
+                            message: "Check your terminal: <%= error.message %>",
+                            sound: "Sosumi"})(error); //Error Notification
+  // plugins.gutil.log(error.toString());
+  this.emit("end"); // End function
+};
+
 gulp.task('templates', function () {
     plugins.nunjucksRender.nunjucks.configure(['source/templates/']);
-    return gulp.src('source/templates/*.html')
-        .pipe(plugins.nunjucksRender(
-          { include: ['source/templates/*.html'],
-            exclude: ['layouts', 'partials'] }
-        ))
+    return gulp.src('source/templates/*.nunjucks')
+        .pipe(plugins.plumber({ errorHandler: nunjucksError }))
+        .pipe(plugins.nunjucksRender())
         .pipe(gulp.dest('dist'))
         .pipe(browserSync.stream());
 });
