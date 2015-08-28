@@ -205,7 +205,7 @@ gualtrapa-sass
 For creating the Gulp workflow I used the following packages:
 * [gulp](https://www.npmjs.com/package/gulp) itself, obviously. No introductions required.
 * [browser-sync](http://www.browsersync.io/), if you don't know it, just check it.
-* [gulp-nunjucks-render](https://www.npmjs.com/package/gulp-nunjucks-render), it renders nunjucks templates to HTML.
+* [gulp-nunjucks-html](https://www.npmjs.com/package/gulp-nunjucks-html), it renders nunjucks templates to HTML.
 * [gulp-sass](https://www.npmjs.com/package/gulp-sass) for compiling our Sass to CSS.
 * [gulp-autoprefixer](https://www.npmjs.com/package/gulp-autoprefixer), plugin that adds vendor prefixes automatically when needed.
 * [gulp-concat](https://www.npmjs.com/package/gulp-concat), to concatenate files, mainly our JavaScripts.
