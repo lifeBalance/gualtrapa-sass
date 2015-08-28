@@ -19,7 +19,7 @@ $ npm install
 ```
 Run Gulp:
 ```bash
-$ gulp
+$ npm run gulp
 ```
 Start designing.
 

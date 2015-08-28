@@ -12,13 +12,6 @@ gulp.task('default', ['serve']);
 
 /*******************************************
 * Static Server + watching scss/html files *
-*  --------------------------------------  *
-*         Local: http://localhost:3002     *
-*      External: http://192.168.1.65:3002  *
-*   -------------------------------------  *
-*            UI: http://localhost:3003     *
-*   UI External: http://192.168.1.65:3003  *
-*   -------------------------------------  *
 ********************************************/
 gulp.task('serve', ['templates', 'sass', 'scripts'], function() {
 
@@ -28,9 +21,13 @@ gulp.task('serve', ['templates', 'sass', 'scripts'], function() {
     }
   });
 
+  gulp.watch(["source/templates/**/*.nunjucks"], ['templates']);
   gulp.watch("source/sass/main.scss", ['sass']);
   gulp.watch("source/js/*.js", ['scripts']);
-  gulp.watch(["source/templates/**/*.nunjucks"], ['templates']);
+
+  gulp.watch("*.html").on('change', browserSync.reload);
+  gulp.watch("css/*.css").on('change', browserSync.reload);
+  gulp.watch("js/scripts.js").on('change', browserSync.reload);
 });
 
 /*******************
@@ -40,15 +37,22 @@ function nunjucksError(error){
   plugins.notify.onError({  title: "Nunjucks Error", 
                             message: "Check your terminal: <%= error.message %>",
                             sound: "Sosumi"})(error); //Error Notification
-  // plugins.gutil.log(error.toString());
+  gutil.log(error.toString());
   this.emit("end"); // End function
 };
 
+var nunjucksOpts = {
+  searchPaths: ['source/templates/layouts', 'source/templates/partials']
+};
+
 gulp.task('templates', function () {
-    plugins.nunjucksRender.nunjucks.configure(['source/templates/']);
     return gulp.src('source/templates/*.nunjucks')
         .pipe(plugins.plumber({ errorHandler: nunjucksError }))
-        .pipe(plugins.nunjucksRender())
+        .pipe(plugins.nunjucksHtml( nunjucksOpts ))
+        .pipe(plugins.jsbeautifier({indentSize: 2}))
+        .pipe(plugins.rename(function (path) {
+          path.extname = ".html"
+        }))
         .pipe(gulp.dest('dist'))
         .pipe(browserSync.stream());
 });
@@ -60,6 +64,7 @@ function errorAlert(error){
   plugins.notify.onError({  title: "SCSS Error", 
                             message: "Check your terminal: <%= error.message %>",
                             sound: "Sosumi"})(error); //Error Notification
+  gutil.log(error.toString());
   this.emit("end"); // End function
 };
 

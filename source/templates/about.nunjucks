@@ -1,7 +1,12 @@
-{% extends "layouts/layout.nunjucks" %}
-  {% block body %}
-  <h1>About me</h1>
-  <h2>
-    <a href="index.html">Go to the Index page</a>    
-  </h2>
-  {% endblock %}
+{% extends 'layout.nunjucks' %}
+
+{% block body %}
+{% include 'navigation.nunjucks' %}
+<div class="container">
+  <h1>ABOUT ME</h1>
+
+  <p>What do you wanna know cowboy?</p>
+  <a href="index.html">Go to the Index page</a>
+  {% include 'footer.nunjucks' %}
+</div>
+{% endblock %}
