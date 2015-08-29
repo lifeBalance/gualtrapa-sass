@@ -3,17 +3,15 @@
 var gulp        = require('gulp');
 var browserSync = require('browser-sync').create();
 var gutil       = require('gulp-util');
-var plugins     = require( 'gulp-load-plugins' )({ camelize: true});
+var plugins     = require('gulp-load-plugins' )({ camelize: true});
 
-/***************
-* Default Task *
-****************/
-gulp.task('default', ['serve']);
+gulp.task('default', ['serve', 'templates', 'watch-templates', 
+                      'sass', 'watch-sass', 'scripts', 'watch-scripts']);
 
 /*******************************************
 * Static Server + watching scss/html files *
 ********************************************/
-gulp.task('serve', ['templates', 'sass', 'scripts'], function() {
+gulp.task('serve', function() {
 
   browserSync.init({
     server: {
@@ -21,18 +19,24 @@ gulp.task('serve', ['templates', 'sass', 'scripts'], function() {
     }
   });
 
-  gulp.watch(["source/templates/**/*.nunjucks"], ['templates']);
-  gulp.watch("source/sass/main.scss", ['sass']);
-  gulp.watch("source/js/*.js", ['scripts']);
-
-  gulp.watch("*.html").on('change', browserSync.reload);
-  gulp.watch("css/*.css").on('change', browserSync.reload);
+  gulp.watch("dist/*.html").on('change', browserSync.reload);
+  
   gulp.watch("js/scripts.js").on('change', browserSync.reload);
-});
+
+  /* In this case, I don't reload the browser when the css changes, 
+     because the 'sass' task injects into the stream the css. */
+  // gulp.watch("css/*.css").on('change', browserSync.reload);
+  });
 
 /*******************
 *     Nunjucks     *
 ********************/
+// Watch just the templates folder
+gulp.task('watch-templates', function () {
+  gulp.watch(['source/templates/**/*.html'], ['templates']);
+});
+
+// Error function
 function nunjucksError(error){
   plugins.notify.onError({  title: "Nunjucks Error", 
                             message: "Check your terminal: <%= error.message %>",
@@ -41,25 +45,28 @@ function nunjucksError(error){
   this.emit("end"); // End function
 };
 
+// Options
 var nunjucksOpts = {
   searchPaths: ['source/templates/layouts', 'source/templates/partials']
 };
 
+// Compiling task
 gulp.task('templates', function () {
-    return gulp.src('source/templates/*.nunjucks')
+    return gulp.src('source/templates/*.html')
         .pipe(plugins.plumber({ errorHandler: nunjucksError }))
         .pipe(plugins.nunjucksHtml( nunjucksOpts ))
         .pipe(plugins.jsbeautifier({indentSize: 2}))
-        .pipe(plugins.rename(function (path) {
-          path.extname = ".html"
-        }))
-        .pipe(gulp.dest('dist'))
-        .pipe(browserSync.stream());
+        .pipe(gulp.dest('dist'));
 });
 
 /*******************
 * Sass Compilation *
 ********************/
+// Watch just the sass folder
+gulp.task('watch-sass', function () {
+  gulp.watch(['source/sass/main.scss'], ['sass']);
+});
+
 function errorAlert(error){
   plugins.notify.onError({  title: "SCSS Error", 
                             message: "Check your terminal: <%= error.message %>",
@@ -73,7 +80,7 @@ gulp.task('sass', function() {
   return gulp.src("source/sass/main.scss")
     .pipe(plugins.plumber({ errorHandler: errorAlert }))
     .pipe(plugins.scssLint({
-          'config': 'sass-lint-config.yml'
+      'config': 'sass-lint-config.yml'
     }))
     .pipe(plugins.sass())
     .pipe(plugins.autoprefixer({
@@ -93,11 +100,13 @@ gulp.task('sass', function() {
     .pipe(browserSync.stream());
 });
 
-gulp.task('sass-watch', ['sass'], browserSync.reload);
-
 /*************
 * JavaScript *
 **************/
+// Watch just the sass folder
+gulp.task('watch-scripts', function () {
+  gulp.watch(['source/js/*.js'], ['scripts']);
+});
 
 /* JShint: linting our JavaScripts */
 gulp.task('jshint', function() {
@@ -106,8 +115,9 @@ gulp.task('jshint', function() {
     .pipe(plugins.jshint.reporter('jshint-stylish'));
 });
 
-/* Concatenating Javascripts.
-   Feel free to add your own scripts to the list. */
+/* Concatenating Bootstrap Plugins.
+   Feel free to add your own scripts to the list, 
+   or remove (commenting out) the scripts you don't need. */
 gulp.task('scripts', ['jshint'], function() {
   return gulp.src([ 'source/js/bootstrap/transition.js',
                     'source/js/bootstrap/alert.js',
@@ -123,10 +133,8 @@ gulp.task('scripts', ['jshint'], function() {
                     'source/js/bootstrap/affix.js',
                     'source/js/custom1.js',])
     .pipe(plugins.concat('scripts.js'))
-    .pipe(gulp.dest('./dist/js'))
-    .pipe(browserSync.stream());
+    .pipe(gulp.dest('./dist/js'));
 });
-
 
 /*************************************************
 *              MANUAL TASKS                      *
