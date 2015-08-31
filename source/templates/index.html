@@ -1,12 +1,11 @@
 {% extends 'layout.html' %}
 
+{% set jumbo = { 'heading': 'Index Page', 'paragraph': 'This is the index page' } %}
+
 {% block body %}
-{% include 'navigation.html' %}
-<div class="container">
   <h1>Index Page</h1>
+  
   <p>Hello world!</p>
   <a href="about.html">Go to the About page</a>
-  {% include 'footer.html' %}
-</div>
 {% endblock %}
 
