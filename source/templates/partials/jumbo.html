@@ -1,5 +1,5 @@
 <div class="jumbotron">
-  <h1>{{ jumbo.heading }}</h1>
-  <p>{{ jumbo.paragraph }}</p>
+  <h1>{{ jumbo.heading if jumbo.heading }}</h1>
+  <p>{{ jumbo.paragraph if jumbo.heading }}</p>
   <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
 </div>

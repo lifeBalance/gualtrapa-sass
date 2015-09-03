@@ -5,7 +5,7 @@ var browserSync = require('browser-sync').create();
 var gutil       = require('gulp-util');
 var plugins     = require('gulp-load-plugins' )({ camelize: true});
 
-gulp.task('default', ['serve', 'templates', 'watch-templates', 
+gulp.task('default', ['serve', 'templates', 'watch-templates',
                       'sass', 'watch-sass', 'scripts', 'watch-scripts']);
 
 /*******************************************
@@ -20,13 +20,13 @@ gulp.task('serve', function() {
   });
 
   gulp.watch("dist/*.html").on('change', browserSync.reload);
-  
+
   gulp.watch("js/scripts.js").on('change', browserSync.reload);
 
-  /* In this case, I don't reload the browser when the css changes, 
+  /* In this case, I don't reload the browser when the css changes,
      because the 'sass' task injects into the stream the css. */
   // gulp.watch("css/*.css").on('change', browserSync.reload);
-  });
+});
 
 /*******************
 *     Nunjucks     *
@@ -38,7 +38,7 @@ gulp.task('watch-templates', function () {
 
 // Error function
 function nunjucksError(error){
-  plugins.notify.onError({  title: "Nunjucks Error", 
+  plugins.notify.onError({  title: "Nunjucks Error",
                             message: "Check your terminal: <%= error.message %>",
                             sound: "Sosumi"})(error); //Error Notification
   gutil.log(error.toString());
@@ -68,7 +68,7 @@ gulp.task('watch-sass', function () {
 });
 
 function errorAlert(error){
-  plugins.notify.onError({  title: "SCSS Error", 
+  plugins.notify.onError({  title: "SCSS Error",
                             message: "Check your terminal: <%= error.message %>",
                             sound: "Sosumi"})(error); //Error Notification
   gutil.log(error.toString());
@@ -103,7 +103,7 @@ gulp.task('sass', function() {
 /*************
 * JavaScript *
 **************/
-// Watch just the sass folder
+// Watch just the js folder
 gulp.task('watch-scripts', function () {
   gulp.watch(['source/js/*.js'], ['scripts']);
 });
@@ -116,7 +116,7 @@ gulp.task('jshint', function() {
 });
 
 /* Concatenating Bootstrap Plugins.
-   Feel free to add your own scripts to the list, 
+   Feel free to add your own scripts to the list,
    or remove (commenting out) the scripts you don't need. */
 gulp.task('scripts', ['jshint'], function() {
   return gulp.src([ 'source/js/bootstrap/transition.js',
@@ -176,7 +176,7 @@ gulp.task('minify-main-styles', ['sass'], function() {
     .pipe(plugins.rename('main.min.css'))
     .pipe(plugins.minifyCss({compatibility: 'ie8'}))
     .pipe(gulp.dest('dist/css'));
-}); 
+});
 
 // It generates 'bootstrap.min.css'
 gulp.task('minify-bootstrap', ['compile-bootstrap'], function() {
@@ -184,7 +184,7 @@ gulp.task('minify-bootstrap', ['compile-bootstrap'], function() {
     .pipe(plugins.rename('bootstrap.min.css'))
     .pipe(plugins.minifyCss({compatibility: 'ie8'}))
     .pipe(gulp.dest('dist/css'));
-}); 
+});
 
 // It generates 'bootstrap-theme.min.css' (Optional theme)
 gulp.task('minify-bootstrap-theme', ['compile-bootstrap-theme'], function() {
